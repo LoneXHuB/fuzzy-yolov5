@@ -10,7 +10,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
-import lxFuzz
+import utils.lxFuzz as lxFuzz
 
 def fitness(x):
     # Model fitness as a weighted combination of metrics
