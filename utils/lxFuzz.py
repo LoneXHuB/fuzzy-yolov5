@@ -14,29 +14,30 @@ FIoU = np.arange(0, 1., PRECISION) #fuzzy IoU
 
 # Generate fuzzy membership functions
 #iou
-iou_vlo = fuzz.trimf(iou, [.1, .1, .3])
+iou_vlo = fuzz.trimf(iou, [0, 0, .3])
 iou_lo = fuzz.trimf(iou, [.2, .3, .4])
 iou_md = fuzz.trimf(iou, [.35, .45, .5])
-iou_hi = fuzz.trimf(iou, [.45, .55, .65])
-iou_vhi = fuzz.trimf(iou, [.55, .75, .75])
+iou_hi = fuzz.trimf(iou, [.45, .55, .75])
+iou_vhi = fuzz.trimf(iou, [.55, 1, 1])
 
-v_vlo = fuzz.trimf(iou, [.1, .1, .3])
-v_lo = fuzz.trimf(iou, [.2, .3, .4])
-v_md = fuzz.trimf(iou, [.35, .45, .5])
-v_hi = fuzz.trimf(iou, [.45, .55, .65])
-v_vhi = fuzz.trimf(iou, [.55, .75, .75])
+v_vlo = fuzz.trimf(v, [0, 0, .3])
+v_lo = fuzz.trimf(v, [.2, .3, .4])
+v_md = fuzz.trimf(v, [.35, .45, .5])
+v_hi = fuzz.trimf(v, [.45, .55, .75])
+v_vhi = fuzz.trimf(v, [.55, 1, 1])
 
-DIoU_vlo = fuzz.trimf(iou, [.1, .1, .3])
-DIoU_lo = fuzz.trimf(iou, [.2, .3, .4])
-DIoU_md = fuzz.trimf(iou, [.35, .45, .5])
-DIoU_hi = fuzz.trimf(iou, [.45, .55, .65])
-DIoU_vhi = fuzz.trimf(iou, [.55, .75, .75])
+DIoU_vlo = fuzz.trimf(DIoU, [0, 0, .3])
+DIoU_lo = fuzz.trimf(DIoU, [.2, .3, .4])
+DIoU_md = fuzz.trimf(DIoU, [.35, .45, .5])
+DIoU_hi = fuzz.trimf(DIoU, [.45, .55, .75])
+DIoU_vhi = fuzz.trimf(DIoU, [.55, 1, 1])
 
-pred_vlo = fuzz.trimf(iou, [.1, .1, .3])
-pred_lo = fuzz.trimf(iou, [.2, .3, .4])
-pred_md = fuzz.trimf(iou, [.35, .45, .5])
-pred_hi = fuzz.trimf(iou, [.45, .55, .65])
-pred_vhi = fuzz.trimf(iou, [.55, .75, .75])
+FIoU_vlo = fuzz.trimf(DIoU, [0, 0, .3])
+FIoU_lo = fuzz.trimf(DIoU, [.2, .3, .4])
+FIoU_md = fuzz.trimf(DIoU, [.35, .45, .5])
+FIoU_hi = fuzz.trimf(DIoU, [.45, .55, .75])
+FIoU_vhi = fuzz.trimf(DIoU, [.55, 1, 1])
+
 print("LxFuzzy status: Defined mebership functions!")
 
 def compute_FIoU(x_DIoU, x_v, x_iou):
