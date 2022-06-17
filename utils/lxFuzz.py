@@ -89,6 +89,10 @@ def compute_FIoU(x_DIoU, x_v, x_iou):
 
     aggregated = np.fmax(FIoU_vhi_rule, np.fmax(np.fmax(FIoU_vlo_rule,FIoU_lo_rule) , np.fmax(FIoU_md_rule, FIoU_hi_rule)))
 
-    return fuzz.defuzz(FIoU, aggregated, 'centroid')
+    FIoU_res = fuzz.defuzz(FIoU, aggregated, 'centroid')
+
+    print(f"FIoU == {FIoU_res}", end="/r")
+
+    return FIoU_res 
 
 
