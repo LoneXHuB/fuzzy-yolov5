@@ -82,6 +82,20 @@ FIoU_md = fuzz.trimf(DIoU, [.35, .45, .5])
 FIoU_hi = fuzz.trimf(DIoU, [.45, .55, .75])
 FIoU_vhi = fuzz.trimf(DIoU, [.55, 1, 1])
 
+###########Added#############
+def get_default_device():
+        """Pick GPU if available, else CPU"""
+        if torch.cuda.is_available():
+            return torch.device('cuda')
+        else:
+            return torch.device('cpu')
+
+def to_device( data, device):
+    """Move tensor(s) to chosen device"""   
+    if isinstance(data, (list,tuple)):
+        return [self.to_device(x, device) for x in data]
+    return data.to(device, non_blocking=True)
+###########Added#############
 print("LxFuzzy status: Defined mebership functions!")
 def compute_FIoU(DIOU, V, IOU):
     # We need the activation of our fuzzy membership functions at these values.
@@ -149,5 +163,7 @@ def compute_FIoU(DIOU, V, IOU):
     print()
     print(f"mean fiou_mat : {np.mean(fiou_mat)}")
 
-    return torch.tensor(fiou_mat)
+    device = get_default_device()
+    res = to_device(torch.tensor(fiou_mat), device)
+    return res
 

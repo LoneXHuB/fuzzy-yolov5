@@ -250,7 +250,8 @@ def bbox_iou(box1, box2, xywh=True, GIoU=False, DIoU=False, CIoU=False, FIoU = F
                     alpha = v / (v - iou + (1 + eps))
                 if FIoU:
                     DIoU = iou - rho2 / c2
-                    return lxFuzz.compute_FIoU(DIoU, v, iou)#fuzzy IoU score using DIoU, consistensy of aspect ratio, and iou
+                    fiou = lxFuzz.compute_FIoU(DIoU, v, iou)#fuzzy IoU score using DIoU, consistensy of aspect ratio, and iou
+                    return iou - fiou
                 CIoU = iou - (rho2 / c2 + v * alpha)
                 print(f"CIoU == {CIoU.shape}")
                 return CIoU  # CIoU
