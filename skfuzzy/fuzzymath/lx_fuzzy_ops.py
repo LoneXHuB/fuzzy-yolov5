@@ -567,13 +567,14 @@ def interp_membership(x, xmf, xx, zero_outside_x=True):
         kwargs = (None, None)
     else:
         kwargs = (0.0, 0.0)
-    
+    xx = xx.detach().cpu()
     res =  np.interp(xx, x, xmf)
     return res
 
 
 from numba import jit, cuda
 import cupy as cp
+
 def interp_cuda(x : cp.ndarray, xmf : cp.ndarray, xx : cp.ndarray, zero_outside_x=True):
     # Nothing beats cuda
     if not zero_outside_x:
