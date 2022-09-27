@@ -256,7 +256,7 @@ def bbox_iou(box1, box2, xywh=True, GIoU=False, DIoU=False, CIoU=False, FIoU = F
                     print(f"iouSize() : \n {distance.size()}")
                     print(f"catSize() : {torch.cat((distance,v , iou),1).size()}")
                     with open('metrics2F.txt', 'a') as file:
-                        [file.write(f'{tuple(x)} \n') for x in torch.cat((distance,v , iou),1)]
+                        [file.write(f'{tuple(x.item())} \n') for x in torch.cat((distance,v , iou),1)]
                     return iou - fiou
                 CIoU = iou - (rho2 / c2 + v * alpha)
                 print(f"CIoU == {CIoU.shape}")
