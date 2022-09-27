@@ -253,6 +253,8 @@ def bbox_iou(box1, box2, xywh=True, GIoU=False, DIoU=False, CIoU=False, FIoU = F
                     fiou = lxFuzz.compute_FIoU(distance, v, iou)#fuzzy IoU score using DIoU, consistensy of aspect ratio, and iou
                     print(f"distance : \n {distance}")
                     print(f"distance : \n {distance.size()}")
+                    with open('metrics2F.txt', 'a') as file:
+                        [file.write(f'{tuple(x)} \n') for x in torch.cat(distance[...,0],v[...,0] , iou[...,0])]
                     return iou - fiou
                 CIoU = iou - (rho2 / c2 + v * alpha)
                 print(f"CIoU == {CIoU.shape}")
