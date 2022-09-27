@@ -249,8 +249,10 @@ def bbox_iou(box1, box2, xywh=True, GIoU=False, DIoU=False, CIoU=False, FIoU = F
                 with torch.no_grad():
                     alpha = v / (v - iou + (1 + eps))
                 if FIoU:
-                    DIoU = 1 - rho2 / c2
-                    fiou = lxFuzz.compute_FIoU(DIoU, v, iou)#fuzzy IoU score using DIoU, consistensy of aspect ratio, and iou
+                    distance = 1 - rho2 / c2
+                    fiou = lxFuzz.compute_FIoU(distance, v, iou)#fuzzy IoU score using DIoU, consistensy of aspect ratio, and iou
+                    print(f"distance : \n {distance}")
+                    print(f"distance : \n {distance.size()}")
                     return iou - fiou
                 CIoU = iou - (rho2 / c2 + v * alpha)
                 print(f"CIoU == {CIoU.shape}")
