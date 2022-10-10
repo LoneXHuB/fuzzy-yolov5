@@ -44,7 +44,7 @@ from utils.general import (LOGGER, check_file, check_img_size, check_imshow, che
                            increment_path, non_max_suppression, print_args, scale_coords, strip_optimizer, xyxy2xywh)
 from utils.plots import Annotator, colors, save_one_box
 from utils.torch_utils import select_device, time_sync
-
+import utils.lxFuzz as lxFuzz
 
 @torch.no_grad()
 def run(
@@ -129,9 +129,14 @@ def run(
 
         # Second-stage classifier (optional)
         # pred = utils.general.apply_classifier(pred, classifier_model, im, im0s)
-
         # Process predictions
         for i, det in enumerate(pred):  # per image
+            in_wheel = torch.tensor([0])                    
+            in_headlight = torch.tensor([0])  
+            in_windshield = torch.tensor([0])
+            in_breaklight = torch.tensor([0])
+            in_rearview = torch.tensor([0])
+
             seen += 1
             if webcam:  # batch_size >= 1
                 p, im0, frame = path[i], im0s[i].copy(), dataset.count
@@ -157,6 +162,12 @@ def run(
 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
+                    in_wheel = torch.tensor([conf]) if int(cls) == 0 else in_wheel           
+                    in_headlight = torch.tensor([conf]) if int(cls) == 1 else in_headlight
+                    in_windshield = torch.tensor([conf]) if int(cls) == 2 else in_windshield
+                    in_breaklight = torch.tensor([conf]) if int(cls) == 3 else in_breaklight
+                    in_rearview = torch.tensor([conf]) if int(cls) == 4 else in_rearview
+
                     if save_txt:  # Write to file
                         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                         line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
@@ -170,7 +181,7 @@ def run(
                     if save_crop:
                         save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
 
-
+                lxFuzz.compute_car_pred(in_wheel, in_headlight, in_windshield, in_breaklight, in_rearview)
             # Stream results
             im0 = annotator.result()
             if view_img:

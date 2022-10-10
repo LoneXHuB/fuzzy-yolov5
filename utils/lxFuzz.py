@@ -13,6 +13,7 @@ DIoU = np.arange(0, 1., PRECISION) #center distance squared
 
 FIoU = np.arange(0, 1., PRECISION) #fuzzy IoU
 
+
 # Generate fuzzy membership functions
 #iou
 iou_vlo = fuzz.trimf(iou, [0, 0, .3])
@@ -81,6 +82,40 @@ FIoU_lo = fuzz.trimf(DIoU, [0.05, .3, .4])
 FIoU_md = fuzz.trimf(DIoU, [.35, .45, .5])
 FIoU_hi = fuzz.trimf(DIoU, [.45, .55, .75])
 FIoU_vhi = fuzz.trimf(DIoU, [.55, 1, 1])
+
+############Fuzzy elements##################
+x_headlight = np.arange(0, 11, 1)
+x_windshield = np.arange(0, 11, 1)
+x_wheel = np.arange(0, 11, 1)
+x_breaklight = np.arange(0,11,1)
+x_rearview = np.arange(0,11,1)
+
+y_car = np.arange(0,11,1)
+
+# Generate fuzzy membership functions
+headlight_lo = fuzz.trimf(x_headlight, [0, 0, 5])
+headlight_md = fuzz.trimf(x_headlight, [2, 4, 7])
+headlight_hi = fuzz.trimf(x_headlight, [3, 10, 10])
+
+windshield_lo = fuzz.trimf(x_windshield, [0, 0, 5])
+windshield_md = fuzz.trimf(x_windshield, [2, 4, 7])
+windshield_hi = fuzz.trimf(x_windshield, [3, 10, 10])
+
+wheel_lo = fuzz.trimf(x_wheel, [0, 0, 5])
+wheel_md = fuzz.trimf(x_wheel, [2, 4, 10])
+wheel_hi = fuzz.trimf(x_wheel, [3, 10, 10])
+
+breaklight_lo = fuzz.trimf(x_breaklight, [0, 0, 5])
+breaklight_md = fuzz.trimf(x_breaklight, [2, 4, 7])
+breaklight_hi = fuzz.trimf(x_breaklight, [3, 10, 10])
+
+rearview_lo = fuzz.trimf(x_rearview, [0, 0, 5])
+rearview_md = fuzz.trimf(x_rearview, [2, 4, 7])
+rearview_hi = fuzz.trimf(x_rearview, [3, 10, 10])
+
+car_lo = fuzz.trimf(y_car, [0, 0, 5])
+car_md = fuzz.trimf(y_car, [2, 4, 7])
+car_hi = fuzz.trimf(y_car, [3, 10, 10])
 
 ###########Added#############
 def get_default_device():
@@ -167,3 +202,74 @@ def compute_FIoU(DIOU, V, IOU):
     res = to_device(torch.tensor(fiou_mat), device)
     return res
 
+def compute_car_pred(in_wheel, in_headlight, in_windshield, in_breaklight, in_rearview):
+    headlight_level_lo = fuzz.interp_membership(x_headlight, headlight_lo, in_headlight)
+    headlight_level_md = fuzz.interp_membership(x_headlight, headlight_md, in_headlight)
+    headlight_level_hi = fuzz.interp_membership(x_headlight, headlight_hi, in_headlight)
+
+    windshield_level_lo = fuzz.interp_membership(x_windshield, windshield_lo, in_windshield)
+    windshield_level_md = fuzz.interp_membership(x_windshield, windshield_md, in_windshield)
+    windshield_level_hi = fuzz.interp_membership(x_windshield, windshield_hi, in_windshield)
+
+    rearview_level_lo = fuzz.interp_membership(x_rearview, rearview_lo, in_rearview)
+    rearview_level_md = fuzz.interp_membership(x_rearview, rearview_md, in_rearview)
+    rearview_level_hi = fuzz.interp_membership(x_rearview, rearview_hi, in_rearview)
+
+    breaklight_level_lo = fuzz.interp_membership(x_breaklight, breaklight_lo, in_breaklight)
+    breaklight_level_md = fuzz.interp_membership(x_breaklight, breaklight_md, in_breaklight)
+    breaklight_level_hi = fuzz.interp_membership(x_breaklight, breaklight_hi, in_breaklight)
+
+    wheel_level_lo = fuzz.interp_membership(x_wheel, wheel_lo, in_wheel)
+    wheel_level_md = fuzz.interp_membership(x_wheel, wheel_md, in_wheel)
+    wheel_level_hi = fuzz.interp_membership(x_wheel, wheel_hi, in_wheel)
+
+    # Now we take our rules and apply them. Rule 1 concerns bad food OR service.
+
+    #IF headlights_hi and wheel_hi and breaklights_hi and 
+
+    # If if (headlights_hi OR breaklights_hi) and (windshield_hi OR rearview_hi OR wheel_hi)
+    active_rule1 = np.fmax(wheel_level_hi, windshield_level_hi)
+    active_rule1 = np.fmax(active_rule1, rearview_level_hi)
+    active_rule = np.fmax(headlight_level_hi,breaklight_level_hi)
+    active_rule1 = np.fmin(active_rule1, active_rule)
+    # Now we apply this by clipping the top off the corresponding output
+    # membership function with `np.fmin`
+    car_activation_hi = np.fmin(active_rule1, car_hi)  # removed entirely to 0
+
+    #IF headlights_lo AND breaklights_lo OR ( wheel_lo and breaklights_lo and all low)
+    #For rule 2 we connect acceptable service to medium tipping
+    active_rule2 = np.fmin(wheel_level_lo, windshield_level_lo)
+    active_rule2 = np.fmin(active_rule2, rearview_level_lo)
+    active_rule = np.fmin(headlight_level_lo,breaklight_level_lo)
+    active_rule2 = np.fmax(active_rule2, active_rule)
+    car_activation_lo = np.fmin(active_rule2, car_lo)
+
+    #MEDIUM : if headlights_md OR headlights_md AND all md
+    active_rule3 = np.fmax(wheel_level_md, windshield_level_md)
+    active_rule3 = np.fmax(active_rule3, rearview_level_md)
+    active_rule3 = np.fmin(active_rule3, headlight_level_md)
+    active_rule = np.fmax(headlight_level_md,breaklight_level_md)
+    active_rule3 = np.fmin(active_rule3, active_rule)
+
+    car_activation_md = np.fmin(active_rule3,car_md)
+
+    print(f"high: {car_activation_hi}")
+    print(f"medium: {car_activation_md}")
+    print(f"low: {car_activation_lo}")
+
+    # Aggregate all three output membership functions together
+    aggregated = np.fmax(car_activation_lo,
+                        np.fmax(car_activation_md, car_activation_hi))
+
+    # Calculate defuzzified result
+    car = fuzz.defuzz(y_car, aggregated, 'lom')
+    aggregated = torch.from_numpy(aggregated)
+
+    with open('CarPred results.txt', 'a') as file:
+        file.write(f'in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel\n')
+        file.write(f'{in_headlight}, {in_windshield}, {in_rearview}, {in_breaklight}, {in_wheel}\n')
+        file.write(f'CAR = {car*10}%\n\n')
+    
+    print(f'in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel')
+    print(f'{in_headlight}, {in_windshield}, {in_rearview}, {in_breaklight}, {in_wheel}')
+    print(f'CAR = {car*10}%\n')
