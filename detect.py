@@ -162,11 +162,11 @@ def run(
 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
-                    in_wheel = torch.tensor([conf]) if int(cls) == 0 else in_wheel           
-                    in_headlight = torch.tensor([conf]) if int(cls) == 1 else in_headlight
-                    in_windshield = torch.tensor([conf]) if int(cls) == 2 else in_windshield
-                    in_breaklight = torch.tensor([conf]) if int(cls) == 3 else in_breaklight
-                    in_rearview = torch.tensor([conf]) if int(cls) == 4 else in_rearview
+                    in_wheel = torch.tensor([conf * 10]) if int(cls) == 0 else in_wheel           
+                    in_headlight = torch.tensor([conf * 10]) if int(cls) == 1 else in_headlight
+                    in_windshield = torch.tensor([conf * 10]) if int(cls) == 2 else in_windshield
+                    in_breaklight = torch.tensor([conf * 10]) if int(cls) == 3 else in_breaklight
+                    in_rearview = torch.tensor([conf * 10]) if int(cls) == 4 else in_rearview
 
                     if save_txt:  # Write to file
                         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
