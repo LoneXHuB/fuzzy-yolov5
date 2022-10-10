@@ -234,7 +234,25 @@ def compute_car_pred(in_wheel, in_headlight, in_windshield, in_breaklight, in_re
     active_rule1 = np.fmin(active_rule1, active_rule)
     # Now we apply this by clipping the top off the corresponding output
     # membership function with `np.fmin`
-    car_activation_hi = np.fmin(active_rule1, car_hi)  # removed entirely to 0
+    car_activation_hi = np.fmin(active_rule1, car_hi)
+
+    # If if (headlights_hi OR breaklights_hi) OR (windshield_hi OR rearview_hi OR wheel_hi)
+    active_rule1 = np.fmax(wheel_level_hi, windshield_level_hi)
+    active_rule1 = np.fmax(active_rule1, rearview_level_hi)
+    active_rule = np.fmax(headlight_level_hi,breaklight_level_hi)
+    active_rule1 = np.fmax(active_rule1, active_rule)
+    # Now we apply this by clipping the top off the corresponding output
+    # membership function with `np.fmin`
+    car_activation_hi2 = np.fmin(active_rule1, car_hi)  # removed entirely to 0
+
+    # If if (headlights_md OR breaklights_md) OR (windshield_md OR rearview_md OR wheel_md)
+    active_rule1 = np.fmax(wheel_level_hi, windshield_level_hi)
+    active_rule1 = np.fmax(active_rule1, rearview_level_hi)
+    active_rule = np.fmax(headlight_level_hi,breaklight_level_hi)
+    active_rule1 = np.fmax(active_rule1, active_rule)
+    # Now we apply this by clipping the top off the corresponding output
+    # membership function with `np.fmin`
+    car_activation_hi3 = np.fmin(active_rule1, car_hi)
 
     #IF headlights_lo AND breaklights_lo OR ( wheel_lo and breaklights_lo and all low)
     #For rule 2 we connect acceptable service to medium tipping
@@ -253,13 +271,15 @@ def compute_car_pred(in_wheel, in_headlight, in_windshield, in_breaklight, in_re
 
     car_activation_md = np.fmin(active_rule3,car_md)
 
+
     print(f"high: {car_activation_hi}")
     print(f"medium: {car_activation_md}")
     print(f"low: {car_activation_lo}")
 
     # Aggregate all three output membership functions together
-    aggregated = np.fmax(car_activation_lo,
-                        np.fmax(car_activation_md, car_activation_hi))
+    aggregated = np.fmax(np.fmax(np.fmax(car_activation_lo,
+                        np.fmax(car_activation_md, car_activation_hi)),
+                            car_activation_hi2),car_activation_hi3)
 
     # Calculate defuzzified result
     car = fuzz.defuzz(y_car, aggregated, 'lom')
