@@ -265,14 +265,25 @@ def compute_car_pred(in_wheel, in_headlight, in_windshield, in_breaklight, in_re
     #MEDIUM : if headlights_md OR headlights_md AND all md
     active_rule3 = np.fmax(wheel_level_md, windshield_level_md)
     active_rule3 = np.fmax(active_rule3, rearview_level_md)
-    active_rule3 = np.fmin(active_rule3, headlight_level_md)
+    active_rule3 = np.fmax(active_rule3, headlight_level_md)
     active_rule = np.fmax(headlight_level_md,breaklight_level_md)
     active_rule3 = np.fmin(active_rule3, active_rule)
 
     car_activation_md = np.fmin(active_rule3,car_md)
 
+    #MEDIUM : if Headlights_lo OR breaklights_lo AND (windshield md OR all md)
+    active_rule3 = np.fmax(wheel_level_md, windshield_level_md)
+    active_rule3 = np.fmax(active_rule3, rearview_level_md)
+    active_rule3 = np.fmin(active_rule3, headlight_level_md)
+    active_rule = np.fmax(headlight_level_md,breaklight_level_md)
+    active_rule3 = np.fmin(active_rule3, active_rule)
+
+    car_activation_md2 = np.fmin(active_rule3,car_md)
+    car_activation_md = np.fmax(car_activation_md,car_activation_md2)
+
 
     print(f"high: {car_activation_hi}")
+
     print(f"medium: {car_activation_md}")
     print(f"low: {car_activation_lo}")
 
