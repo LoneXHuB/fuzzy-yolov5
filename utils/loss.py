@@ -174,7 +174,7 @@ class ComputeLoss:
         lcls *= self.hyp['cls']
         bs = tobj.shape[0]  # batch size
 
-        lxFuzz.write_values('loss.txt', lbox * bs)
+        lxFuzz.write_values('loss.txt', lbox.item())
         
         return (lbox + lobj + lcls) * bs, torch.cat((lbox, lobj, lcls)).detach()
 
