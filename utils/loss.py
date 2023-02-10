@@ -8,7 +8,7 @@ import torch.nn as nn
 
 from utils.metrics import bbox_iou
 from utils.torch_utils import de_parallel
-import lxFuzz
+import utils.lxFuzz
 
 def smooth_BCE(eps=0.1):  # https://github.com/ultralytics/yolov3/issues/238#issuecomment-598028441
     # return positive, negative label smoothing BCE targets
@@ -177,7 +177,7 @@ class ComputeLoss:
         lxFuzz.write_values('loss.txt', lbox * bs)
         
         return (lbox + lobj + lcls) * bs, torch.cat((lbox, lobj, lcls)).detach()
-        
+
     def build_targets(self, p, targets):
         # Build targets for compute_loss(), input targets(image,class,x,y,w,h)
         na, nt = self.na, targets.shape[0]  # number of anchors, targets
