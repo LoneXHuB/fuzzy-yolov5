@@ -304,3 +304,14 @@ def compute_car_pred(in_wheel, in_headlight, in_windshield, in_breaklight, in_re
     print(f'in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel')
     print(f'{in_headlight}, {in_windshield}, {in_rearview}, {in_breaklight}, {in_wheel}')
     print(f'CAR = {car*10}%\n')
+
+def write_values(filename,*values):
+    line = ''
+    for value in values[:-1]:
+        line += f'{str(value)},'
+    line += str(values[-1])
+    line +='\n'
+
+    print(line)
+    with open(filename, 'a') as file:
+        file.write(line)

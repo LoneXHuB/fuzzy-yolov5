@@ -1,0 +1,152 @@
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([3.45248]), tensor([3.47253]), tensor([0]), tensor([0]), tensor([6.55582])
+CAR = 53.22308475080567%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([0]), tensor([0]), tensor([4.93696]), tensor([6.96892]), tensor([8.32134])
+CAR = 75.3992465617965%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([0]), tensor([5.04764]), tensor([0]), tensor([0]), tensor([5.29556])
+CAR = 39.93583894462429%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([4.37035]), tensor([8.74349]), tensor([0]), tensor([0]), tensor([0])
+CAR = 61.04805925223183%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([5.38975]), tensor([0]), tensor([0]), tensor([0]), tensor([7.68803])
+CAR = 64.79680445051858%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([8.55072]), tensor([8.90956]), tensor([8.90705]), tensor([0]), tensor([0])
+CAR = 76.15920110519802%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([6.35725]), tensor([0]), tensor([0]), tensor([0]), tensor([0])
+CAR = 44.93909831449266%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([0]), tensor([0]), tensor([0]), tensor([7.73535]), tensor([5.39704])
+CAR = 74.81714042599091%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([0]), tensor([5.13041]), tensor([0]), tensor([3.29474]), tensor([7.45785])
+CAR = 55.21831017309778%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([2.68672]), tensor([0]), tensor([0]), tensor([0]), tensor([8.71396])
+CAR = 56.604665684710014%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([6.64029]), tensor([0]), tensor([0]), tensor([0]), tensor([6.19805])
+CAR = 71.23455486093184%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([3.47911]), tensor([7.33940]), tensor([0]), tensor([0]), tensor([3.92541])
+CAR = 55.32689080710669%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([0]), tensor([0]), tensor([0]), tensor([5.55777]), tensor([7.64206])
+CAR = 67.15438159230791%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([3.32785]), tensor([0]), tensor([0]), tensor([0]), tensor([4.40145])
+CAR = 44.09700717113864%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([5.90092]), tensor([8.98511]), tensor([0]), tensor([3.60670]), tensor([0])
+CAR = 69.60574405545798%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([8.78000]), tensor([4.53819]), tensor([0]), tensor([0]), tensor([5.07302])
+CAR = 76.0273188429621%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([7.77787]), tensor([0]), tensor([7.29866]), tensor([0]), tensor([4.34175])
+CAR = 74.87776147976714%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([5.79132]), tensor([0]), tensor([7.43022]), tensor([0]), tensor([3.90830])
+CAR = 66.53880322436721%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([6.36614]), tensor([0]), tensor([0]), tensor([8.64911]), tensor([6.01201])
+CAR = 72.54696392157886%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([3.93268]), tensor([0]), tensor([0]), tensor([6.43113]), tensor([8.94747])
+CAR = 63.91904709296181%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([9.09603]), tensor([3.81346]), tensor([5.08225]), tensor([0]), tensor([0])
+CAR = 76.2907646388747%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([5.58532]), tensor([5.60277]), tensor([0]), tensor([0]), tensor([3.62760])
+CAR = 60.269674628748156%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([0]), tensor([6.46038]), tensor([0]), tensor([0]), tensor([5.70347])
+CAR = 45.343813725733646%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([0]), tensor([4.01460]), tensor([0]), tensor([0]), tensor([0])
+CAR = 30.14758419791086%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([2.83305]), tensor([4.66342]), tensor([0]), tensor([0]), tensor([0])
+CAR = 43.51630611048214%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([0]), tensor([8.15751]), tensor([0]), tensor([0]), tensor([2.66663])
+CAR = 50.08432639727544%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([5.99232]), tensor([8.90273]), tensor([0]), tensor([0]), tensor([8.05088])
+CAR = 70.18435958647622%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([8.68686]), tensor([3.79056]), tensor([0]), tensor([0]), tensor([5.86985])
+CAR = 75.93115974548161%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([0]), tensor([0]), tensor([0]), tensor([8.98353]), tensor([0])
+CAR = 51.374266983453026%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([3.26896]), tensor([4.81484]), tensor([0]), tensor([0]), tensor([0])
+CAR = 45.88642246354211%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([0]), tensor([0]), tensor([0]), tensor([0]), tensor([4.34260])
+CAR = 33.21247855917599%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([0]), tensor([0]), tensor([0]), tensor([8.37321]), tensor([7.28810])
+CAR = 75.59878521469906%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([4.47603]), tensor([5.19436]), tensor([0]), tensor([7.75700]), tensor([6.12772])
+CAR = 62.90179667334186%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([0]), tensor([4.34318]), tensor([0]), tensor([0]), tensor([0])
+CAR = 33.21749489646744%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([9.03120]), tensor([7.08365]), tensor([5.35749]), tensor([0]), tensor([5.04855])
+CAR = 76.26326319684041%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([6.88525]), tensor([5.81714]), tensor([0]), tensor([0]), tensor([0])
+CAR = 72.90199611225604%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([0]), tensor([0]), tensor([0]), tensor([0]), tensor([3.59447])
+CAR = 25.44412071583078%
+
+in_headlight, in_windshield, in_rearview, in_breaklight, in_wheel
+tensor([0]), tensor([4.65690]), tensor([6.84991]), tensor([0]), tensor([0])
+CAR = 46.74744525382324%
+
