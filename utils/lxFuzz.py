@@ -2,7 +2,7 @@ import cupy as cp
 import numpy as np
 import skfuzzy as fuzz
 import torch
-
+from numba import jit
 import matplotlib.pyplot as plt
 
 PRECISION = 0.01
