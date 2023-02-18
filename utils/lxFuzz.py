@@ -129,6 +129,8 @@ def to_device( data, device):
     return data.to(device, non_blocking=True)
 ###########Added#############
 print("LxFuzzy status: Defined mebership functions!")
+
+@jit(target_backend ="cuda")
 def compute_FIoU(DIOU, V, IOU):
     # We need the activation of our fuzzy membership functions at these values.
     fiou_mat = cp.zeros(len(DIOU) , dtype=float)
@@ -137,23 +139,23 @@ def compute_FIoU(DIOU, V, IOU):
       x_iou = IOU[indx,]
       x_v = V[indx, ]
 
-      iou_m_vlo = fuzz.interp_membership_lx(iou, iou_vlo, x_iou)
-      iou_m_lo = fuzz.interp_membership_lx(iou, iou_lo, x_iou)
-      iou_m_md = fuzz.interp_membership_lx(iou, iou_md, x_iou)
-      iou_m_hi = fuzz.interp_membership_lx(iou, iou_hi, x_iou)
-      iou_m_vhi = fuzz.interp_membership_lx(iou, iou_vhi, x_iou)
+      iou_m_vlo = fuzz.interp_torch_lx(iou, iou_vlo, x_iou)
+      iou_m_lo = fuzz.interp_torch_lx(iou, iou_lo, x_iou)
+      iou_m_md = fuzz.interp_torch_lx(iou, iou_md, x_iou)
+      iou_m_hi = fuzz.interp_torch_lx(iou, iou_hi, x_iou)
+      iou_m_vhi = fuzz.interp_torch_lx(iou, iou_vhi, x_iou)
 
-      DIoU_m_vlo = fuzz.interp_membership_lx(DIoU, DIoU_vlo, x_DIoU)
-      DIoU_m_lo = fuzz.interp_membership_lx(DIoU, DIoU_lo, x_DIoU)
-      DIoU_m_md = fuzz.interp_membership_lx(DIoU, DIoU_md, x_DIoU)
-      DIoU_m_hi = fuzz.interp_membership_lx(DIoU, DIoU_hi, x_DIoU)
-      DIoU_m_vhi = fuzz.interp_membership_lx(DIoU, DIoU_vhi, x_DIoU)
+      DIoU_m_vlo = fuzz.interp_torch_lx(DIoU, DIoU_vlo, x_DIoU)
+      DIoU_m_lo = fuzz.interp_torch_lx(DIoU, DIoU_lo, x_DIoU)
+      DIoU_m_md = fuzz.interp_torch_lx(DIoU, DIoU_md, x_DIoU)
+      DIoU_m_hi = fuzz.interp_torch_lx(DIoU, DIoU_hi, x_DIoU)
+      DIoU_m_vhi = fuzz.interp_torch_lx(DIoU, DIoU_vhi, x_DIoU)
 
-      v_m_vlo = fuzz.interp_membership_lx(v, v_vlo, x_v)
-      v_m_lo = fuzz.interp_membership_lx(v, v_lo, x_v)
-      v_m_md = fuzz.interp_membership_lx(v, v_md, x_v)
-      v_m_hi = fuzz.interp_membership_lx(v, v_hi, x_v)
-      v_m_vhi = fuzz.interp_membership_lx(v, v_vhi, x_v)
+      v_m_vlo = fuzz.interp_torch_lx(v, v_vlo, x_v)
+      v_m_lo = fuzz.interp_torch_lx(v, v_lo, x_v)
+      v_m_md = fuzz.interp_torch_lx(v, v_md, x_v)
+      v_m_hi = fuzz.interp_torch_lx(v, v_hi, x_v)
+      v_m_vhi = fuzz.interp_torch_lx(v, v_vhi, x_v)
 
       #RULES
       #FIoU_vlo = DIoU_vlo || iou_vlo || v_vlo
