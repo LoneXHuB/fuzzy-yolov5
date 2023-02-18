@@ -138,7 +138,8 @@ def compute_FIoU(DIOU, V, IOU):
     for indx, x_DIoU in enumerate(DIOU):
       x_iou = IOU[indx,]
       x_v = V[indx, ]
-
+      
+      iou = torch.from_numpy(iou)
       iou_m_vlo = interp_torch(iou, iou_vlo, x_iou)
       iou_m_lo = interp_torch(iou, iou_lo, x_iou)
       iou_m_md = interp_torch(iou, iou_md, x_iou)
