@@ -130,7 +130,6 @@ def to_device( data, device):
 ###########Added#############
 print("LxFuzzy status: Defined mebership functions!")
 
-@jit(target_backend ="cuda")
 def compute_FIoU(DIOU, V, IOU):
     # We need the activation of our fuzzy membership functions at these values.
     fiou_mat = cp.zeros(len(DIOU) , dtype=float)
