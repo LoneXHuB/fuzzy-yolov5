@@ -8,11 +8,11 @@ import matplotlib.pyplot as plt
 PRECISION = 0.01
 # Generate universe variables
 #fuzzy IoU score using center convex diagonal squared, distance squared, consistensy of aspect ratio, and iou
-iou = cp.arange(0, 1., PRECISION) # iou
-v  = cp.arange(0, 1., PRECISION) #consistency of aspect ratio
-DIoU = cp.arange(0, 1., PRECISION) #center distance squared
+iou = np.arange(0, 1., PRECISION) # iou
+v  = np.arange(0, 1., PRECISION) #consistency of aspect ratio
+DIoU = np.arange(0, 1., PRECISION) #center distance squared
 
-FIoU = cp.arange(0, 1., PRECISION) #fuzzy IoU
+FIoU = np.arange(0, 1., PRECISION) #fuzzy IoU
 
 
 # Generate fuzzy membership functions
