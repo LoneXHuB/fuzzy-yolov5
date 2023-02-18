@@ -568,6 +568,7 @@ def interp_membership(x, xmf, xx, zero_outside_x=True):
     else:
         kwargs = (0.0, 0.0)
         
+    xx = xx.detach().cpu()
     res =  np.interp(xx, x, xmf)
     return res
 
