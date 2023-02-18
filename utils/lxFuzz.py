@@ -139,7 +139,6 @@ def compute_FIoU(DIOU, V, IOU):
       x_iou = IOU[indx,]
       x_v = V[indx, ]
       
-      iou = torch.from_numpy(iou)
       iou_m_vlo = interp_torch(iou, iou_vlo, x_iou)
       iou_m_lo = interp_torch(iou, iou_lo, x_iou)
       iou_m_md = interp_torch(iou, iou_md, x_iou)
@@ -218,6 +217,7 @@ def interp_torch(x: Tensor, xi: Tensor, yi: Tensor) -> Tensor:
     Returns:
         the interpolated values, same size as `x`.
     """
+    x = torch.from_numpy(x)
     m = (yi[1:] - yi[:-1]) / (xi[1:] - xi[:-1])
     b = yi[:-1] - (m * xi[:-1])
 
