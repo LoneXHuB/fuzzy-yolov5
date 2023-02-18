@@ -191,7 +191,7 @@ def compute_FIoU(DIOU, V, IOU):
 
       aggregated = np.fmax(FIoU_vhi_rule, np.fmax(np.fmax(FIoU_vlo_rule,FIoU_lo_rule) , np.fmax(FIoU_md_rule, FIoU_hi_rule)))
 
-      FIoU_res = fuzz.defuzz(FIoU, aggregated, 'lom')
+      FIoU_res = fuzz.defuzz(FIoU, aggregated, 'centroid')
       fiou_mat[indx] = FIoU_res
       
     fiou_mat = fiou_mat.reshape((len(DIOU),1))
