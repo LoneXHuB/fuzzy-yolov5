@@ -2,6 +2,7 @@ import cupy as cp
 import numpy as np
 import skfuzzy as fuzz
 import torch
+from torch import Tensor
 from numba import jit
 import matplotlib.pyplot as plt
 
@@ -138,23 +139,23 @@ def compute_FIoU(DIOU, V, IOU):
       x_iou = IOU[indx,]
       x_v = V[indx, ]
 
-      iou_m_vlo = interp_torch_lx(iou, iou_vlo, x_iou)
-      iou_m_lo = interp_torch_lx(iou, iou_lo, x_iou)
-      iou_m_md = interp_torch_lx(iou, iou_md, x_iou)
-      iou_m_hi = interp_torch_lx(iou, iou_hi, x_iou)
-      iou_m_vhi = interp_torch_lx(iou, iou_vhi, x_iou)
+      iou_m_vlo = interp_torch(iou, iou_vlo, x_iou)
+      iou_m_lo = interp_torch(iou, iou_lo, x_iou)
+      iou_m_md = interp_torch(iou, iou_md, x_iou)
+      iou_m_hi = interp_torch(iou, iou_hi, x_iou)
+      iou_m_vhi = interp_torch(iou, iou_vhi, x_iou)
 
-      DIoU_m_vlo = interp_torch_lx(DIoU, DIoU_vlo, x_DIoU)
-      DIoU_m_lo = interp_torch_lx(DIoU, DIoU_lo, x_DIoU)
-      DIoU_m_md = interp_torch_lx(DIoU, DIoU_md, x_DIoU)
-      DIoU_m_hi = interp_torch_lx(DIoU, DIoU_hi, x_DIoU)
-      DIoU_m_vhi = interp_torch_lx(DIoU, DIoU_vhi, x_DIoU)
+      DIoU_m_vlo = interp_torch(DIoU, DIoU_vlo, x_DIoU)
+      DIoU_m_lo = interp_torch(DIoU, DIoU_lo, x_DIoU)
+      DIoU_m_md = interp_torch(DIoU, DIoU_md, x_DIoU)
+      DIoU_m_hi = interp_torch(DIoU, DIoU_hi, x_DIoU)
+      DIoU_m_vhi = interp_torch(DIoU, DIoU_vhi, x_DIoU)
 
-      v_m_vlo = interp_torch_lx(v, v_vlo, x_v)
-      v_m_lo = interp_torch_lx(v, v_lo, x_v)
-      v_m_md = interp_torch_lx(v, v_md, x_v)
-      v_m_hi = interp_torch_lx(v, v_hi, x_v)
-      v_m_vhi = interp_torch_lx(v, v_vhi, x_v)
+      v_m_vlo = interp_torch(v, v_vlo, x_v)
+      v_m_lo = interp_torch(v, v_lo, x_v)
+      v_m_md = interp_torch(v, v_md, x_v)
+      v_m_hi = interp_torch(v, v_hi, x_v)
+      v_m_vhi = interp_torch(v, v_vhi, x_v)
 
       #RULES
       #FIoU_vlo = DIoU_vlo || iou_vlo || v_vlo
@@ -200,17 +201,29 @@ def compute_FIoU(DIOU, V, IOU):
     res = to_device(torch.tensor(fiou_mat), device)
     return res
 
+def interp_torch(x: Tensor, xi: Tensor, yi: Tensor) -> Tensor:
+    """One-dimensional linear interpolation for monotonically increasing sample
+    points.
 
-@jit(target_backend ="cuda")
-def interp_torch_lx(x , xx , xmf , indecies):
-    #indecies = torch.floor(x).long()
-    #indecies = torch.clamp(indecies, 0. , len(xx)-2)
-    x1s = xx[indecies]
-    x2s = xx[indecies+1]
-    y1s = xmf[indecies]
-    y2s = xmf[indecies+1]
+    Returns the one-dimensional piecewise linear interpolant to a function with
+    given discrete data points :math:`(xi, yi)`, evaluated at :math:`x`.
 
-    return y1s + (x - x1s) * (y2s-y1s) / (x2s - x1s)
+    Args:
+        x: the :math:`x`-coordinates at which to evaluate the interpolated
+            values.
+        xi: the :math:`x`-coordinates of the data points, must be increasing.
+        yi: the :math:`y`-coordinates of the data points, same length as `xi`.
+
+    Returns:
+        the interpolated values, same size as `x`.
+    """
+    m = (yi[1:] - yi[:-1]) / (xi[1:] - xi[:-1])
+    b = yi[:-1] - (m * xi[:-1])
+
+    indicies = torch.sum(torch.ge(x[:, None], xi[None, :]), 1) - 1
+    indicies = torch.clamp(indicies, 0, len(m) - 1)
+
+    return m[indicies] * x + b[indicies]
 
 def compute_car_pred(in_wheel, in_headlight, in_windshield, in_breaklight, in_rearview):
     headlight_level_lo = fuzz.interp_membership(x_headlight, headlight_lo, in_headlight)
