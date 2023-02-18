@@ -139,23 +139,23 @@ def compute_FIoU(DIOU, V, IOU):
       x_iou = IOU[indx,]
       x_v = V[indx, ]
 
-      iou_m_vlo = fuzz.interp_torch_lx(iou, iou_vlo, x_iou)
-      iou_m_lo = fuzz.interp_torch_lx(iou, iou_lo, x_iou)
-      iou_m_md = fuzz.interp_torch_lx(iou, iou_md, x_iou)
-      iou_m_hi = fuzz.interp_torch_lx(iou, iou_hi, x_iou)
-      iou_m_vhi = fuzz.interp_torch_lx(iou, iou_vhi, x_iou)
+      iou_m_vlo = interp_torch_lx(iou, iou_vlo, x_iou)
+      iou_m_lo = interp_torch_lx(iou, iou_lo, x_iou)
+      iou_m_md = interp_torch_lx(iou, iou_md, x_iou)
+      iou_m_hi = interp_torch_lx(iou, iou_hi, x_iou)
+      iou_m_vhi = interp_torch_lx(iou, iou_vhi, x_iou)
 
-      DIoU_m_vlo = fuzz.interp_torch_lx(DIoU, DIoU_vlo, x_DIoU)
-      DIoU_m_lo = fuzz.interp_torch_lx(DIoU, DIoU_lo, x_DIoU)
-      DIoU_m_md = fuzz.interp_torch_lx(DIoU, DIoU_md, x_DIoU)
-      DIoU_m_hi = fuzz.interp_torch_lx(DIoU, DIoU_hi, x_DIoU)
-      DIoU_m_vhi = fuzz.interp_torch_lx(DIoU, DIoU_vhi, x_DIoU)
+      DIoU_m_vlo = interp_torch_lx(DIoU, DIoU_vlo, x_DIoU)
+      DIoU_m_lo = interp_torch_lx(DIoU, DIoU_lo, x_DIoU)
+      DIoU_m_md = interp_torch_lx(DIoU, DIoU_md, x_DIoU)
+      DIoU_m_hi = interp_torch_lx(DIoU, DIoU_hi, x_DIoU)
+      DIoU_m_vhi = interp_torch_lx(DIoU, DIoU_vhi, x_DIoU)
 
-      v_m_vlo = fuzz.interp_torch_lx(v, v_vlo, x_v)
-      v_m_lo = fuzz.interp_torch_lx(v, v_lo, x_v)
-      v_m_md = fuzz.interp_torch_lx(v, v_md, x_v)
-      v_m_hi = fuzz.interp_torch_lx(v, v_hi, x_v)
-      v_m_vhi = fuzz.interp_torch_lx(v, v_vhi, x_v)
+      v_m_vlo = interp_torch_lx(v, v_vlo, x_v)
+      v_m_lo = interp_torch_lx(v, v_lo, x_v)
+      v_m_md = interp_torch_lx(v, v_md, x_v)
+      v_m_hi = interp_torch_lx(v, v_hi, x_v)
+      v_m_vhi = interp_torch_lx(v, v_vhi, x_v)
 
       #RULES
       #FIoU_vlo = DIoU_vlo || iou_vlo || v_vlo
@@ -200,6 +200,18 @@ def compute_FIoU(DIOU, V, IOU):
     device = get_default_device()
     res = to_device(torch.tensor(fiou_mat), device)
     return res
+
+
+@jit(target_backend ="cuda")
+def interp_torch_lx(x , xx , xmf , indecies):
+    #indecies = torch.floor(x).long()
+    #indecies = torch.clamp(indecies, 0. , len(xx)-2)
+    x1s = xx[indecies]
+    x2s = xx[indecies+1]
+    y1s = xmf[indecies]
+    y2s = xmf[indecies+1]
+
+    return y1s + (x - x1s) * (y2s-y1s) / (x2s - x1s)
 
 def compute_car_pred(in_wheel, in_headlight, in_windshield, in_breaklight, in_rearview):
     headlight_level_lo = fuzz.interp_membership(x_headlight, headlight_lo, in_headlight)
