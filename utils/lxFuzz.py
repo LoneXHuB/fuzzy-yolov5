@@ -81,13 +81,13 @@ FIoU_hi = fuzz.trimf(DIoU, [.45, .55, .75])
 FIoU_vhi = fuzz.trimf(DIoU, [.55, 1, 1])
 
 ############Fuzzy elements##################
-x_headlight = cp.arange(0, 11, 1)
-x_windshield = cp.arange(0, 11, 1)
-x_wheel = cp.arange(0, 11, 1)
-x_breaklight = cp.arange(0,11,1)
-x_rearview = cp.arange(0,11,1)
+x_headlight = np.arange(0, 11, 1)
+x_windshield = np.arange(0, 11, 1)
+x_wheel = np.arange(0, 11, 1)
+x_breaklight = np.arange(0,11,1)
+x_rearview = np.arange(0,11,1)
 
-y_car = cp.arange(0,11,1)
+y_car = np.arange(0,11,1)
 
 # Generate fuzzy membership functions
 headlight_lo = fuzz.trimf(x_headlight, [0, 0, 5])
