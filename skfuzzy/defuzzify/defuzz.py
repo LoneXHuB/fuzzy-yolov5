@@ -3,7 +3,7 @@ defuzz.py : Various methods for defuzzification and lambda-cuts, to convert
             'fuzzy' systems back into 'crisp' values for decisions.
 """
 import numpy as np
-
+import torch
 from .exceptions import EmptyMembershipError, InconsistentMFDataError
 from ..image.arraypad import pad
 
@@ -246,6 +246,7 @@ def defuzz(x, mfx, mode):
     --------
     skfuzzy.defuzzify.centroid, skfuzzy.defuzzify.dcentroid
     """
+    print("\ndelete me\n")
     mode = mode.lower()
     x = x.ravel()
     mfx = mfx.ravel()
@@ -270,7 +271,7 @@ def defuzz(x, mfx, mode):
         return np.min(x[mfx == mfx.max()])
 
     elif 'lom' in mode:
-        return np.max(x[mfx == mfx.max()])
+        return torch.max(x[mfx == mfx.max()])
 
     else:
         raise ValueError("The input for `mode`, {}, was incorrect."
