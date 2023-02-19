@@ -250,7 +250,7 @@ def interp_torch_lx(x ,xmf , xx):
     xmf = to_device(x,torch.device('cuda'))
     
     indecies = torch.floor(x).long()
-    indecies = torch.clamp(indecies, 0. , len(xx)-2)
+    indecies = torch.clamp(indecies, 0. , len(xx)-2).long()
     x1s = xx[indecies]
     x2s = xx[indecies+1]
     y1s = xmf[indecies]
