@@ -201,6 +201,15 @@ def compute_FIoU(DIOU, V, IOU):
     res = to_device(torch.tensor(fiou_mat), device)
     return res
 
+def to_device(data, device):
+    """Move tensor(s) to chosen device"""   
+    if isinstance(data, (list,tuple)):
+        return [to_device(x, device) for x in data]
+    if not isinstance(data, torch.Tensor):
+        data = torch.from_numpy(data)
+    data = data.float()
+    return data.cpu().to(device, non_blocking=False)
+
 def interp_torch(x: Tensor, xi: Tensor, yi: Tensor) -> Tensor:
     """One-dimensional linear interpolation for monotonically increasing sample
     points.
@@ -218,6 +227,7 @@ def interp_torch(x: Tensor, xi: Tensor, yi: Tensor) -> Tensor:
         the interpolated values, same size as `x`.
     """
     x = torch.from_numpy(x)
+    x = to_device(x,torch.device('cuda'))
     m = (yi[1:] - yi[:-1]) / (xi[1:] - xi[:-1])
     b = yi[:-1] - (m * xi[:-1])
 
