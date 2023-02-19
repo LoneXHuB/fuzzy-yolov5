@@ -248,9 +248,6 @@ def interp_torch_lx(x ,xmf , xx):
 
     xmf = torch.from_numpy(xmf)
     xmf = to_device(x,torch.device('cuda'))
-
-    xx = torch.from_numpy(xx)
-    xx = to_device(xx,torch.device('cuda'))
     
     indecies = torch.floor(x).long()
     indecies = torch.clamp(indecies, 0. , len(xx)-2)
