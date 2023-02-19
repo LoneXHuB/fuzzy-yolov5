@@ -252,8 +252,6 @@ def defuzz(x, mfx, mode):
     --------
     skfuzzy.defuzzify.centroid, skfuzzy.defuzzify.dcentroid
     """
-    print(f"\n{type(mfx)}\n")
-    print(f"\n{type(x)}\n")
 
     mode = mode.lower()
     x = x.ravel()
@@ -281,8 +279,8 @@ def defuzz(x, mfx, mode):
     elif 'lom' in mode:
         x = torch.from_numpy(x).to(device="cuda")
         max = lx_max(x,mfx)
-
-        return torch.max(max,dim=0)
+        lom , _ = torch.max(max,dim=0)
+        return lom
 
     else:
         raise ValueError("The input for `mode`, {}, was incorrect."
