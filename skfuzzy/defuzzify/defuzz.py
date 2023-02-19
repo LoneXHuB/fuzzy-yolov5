@@ -274,7 +274,9 @@ def defuzz(x, mfx, mode):
 
     elif 'lom' in mode:
         x = torch.from_numpy(x).to(device="cuda")
-        return torch.max(x[mfx == mfx.max()])
+        max = torch.max(x[mfx == mfx.max()], dim=0)
+
+        return torch.max(max,dim=0)
 
     else:
         raise ValueError("The input for `mode`, {}, was incorrect."
