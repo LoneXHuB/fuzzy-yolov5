@@ -133,7 +133,7 @@ print("LxFuzzy status: Defined mebership functions!")
 
 def compute_FIoU(DIOU, V, IOU):
     # We need the activation of our fuzzy membership functions at these values.
-    fiou_mat = cp.zeros(len(DIOU) , dtype=float)
+    fiou_mat = torch.zeros(len(DIOU) , dtype=float)
 
     for indx, x_DIoU in enumerate(DIOU):
       x_iou = IOU[indx,]
