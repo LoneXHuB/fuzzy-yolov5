@@ -202,11 +202,17 @@ def compute_FIoU(DIOU, V, IOU):
     return res
 
 def lx_max(a ,b):
-  return (a+b+abs(a-b))/2
+    device = get_default_device()
+    a = to_device(torch.tensor(a), device)
+    b = to_device(torch.tensor(b), device)
+    return (a+b+abs(a-b))/2
 
 def lx_min(a, b):
-  min = lx_max(a,b) - abs(a-b)
-  return min
+    device = get_default_device()
+    a = to_device(torch.tensor(a), device)
+    b = to_device(torch.tensor(b), device)
+    min = lx_max(a,b) - abs(a-b)
+    return min
 
 def to_device(data, device):
     """Move tensor(s) to chosen device"""   
