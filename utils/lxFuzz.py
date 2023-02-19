@@ -159,47 +159,54 @@ def compute_FIoU(DIOU, V, IOU):
 
       #RULES
       #FIoU_vlo = DIoU_vlo || iou_vlo || v_vlo
-      FIoU_vlo_rule = cp.fmax(DIoU_m_vlo,iou_m_vlo)
-      FIoU_vlo_rule = cp.fmax(FIoU_vlo_rule, v_m_vlo)
-      FIoU_vlo_rule = cp.fmin(FIoU_vlo_rule,FIoU_vlo)
+      FIoU_vlo_rule = lx_max(DIoU_m_vlo,iou_m_vlo)
+      FIoU_vlo_rule = lx_max(FIoU_vlo_rule, v_m_vlo)
+      FIoU_vlo_rule = lx_min(FIoU_vlo_rule,FIoU_vlo)
 
       #FIoU_lo = DIou_lo || (v_lo && iou_lo)
-      FIoU_lo_rule = cp.fmin(v_m_lo, iou_m_lo)
-      FIoU_lo_rule = cp.fmax(FIoU_lo_rule, DIoU_m_lo)
-      FIoU_lo_rule = cp.fmin(FIoU_lo_rule,FIoU_lo)
+      FIoU_lo_rule = lx_min(v_m_lo, iou_m_lo)
+      FIoU_lo_rule = lx_max(FIoU_lo_rule, DIoU_m_lo)
+      FIoU_lo_rule = lx_min(FIoU_lo_rule,FIoU_lo)
 
       #FIoU_md = DIoU_md && v_md && iou_md
-      FIoU_md_rule = cp.fmin(DIoU_m_md,v_m_md)
-      FIoU_md_rule = cp.fmin(FIoU_md_rule,iou_m_md)
-      FIoU_md_rule = cp.fmin(FIoU_md_rule,FIoU_md)
+      FIoU_md_rule = lx_min(DIoU_m_md,v_m_md)
+      FIoU_md_rule = lx_min(FIoU_md_rule,iou_m_md)
+      FIoU_md_rule = lx_min(FIoU_md_rule,FIoU_md)
 
       #FIoU_hi = DIoU_hi && v_hi && Iou_hi
-      FIoU_hi_rule0 = cp.fmin(DIoU_m_hi, v_m_hi)
-      FIoU_hi_rule0 = cp.fmin(FIoU_hi_rule0, iou_m_hi)
+      FIoU_hi_rule0 = lx_min(DIoU_m_hi, v_m_hi)
+      FIoU_hi_rule0 = lx_min(FIoU_hi_rule0, iou_m_hi)
       #FIoU_hi = DIoU_vhi || v_vhi || Iou_vhi
-      FIoU_hi_rule1 = cp.fmax(DIoU_m_vhi, v_m_vhi)
-      FIoU_hi_rule1 = cp.fmax(FIoU_hi_rule1, iou_m_vhi)
+      FIoU_hi_rule1 = lx_max(DIoU_m_vhi, v_m_vhi)
+      FIoU_hi_rule1 = lx_max(FIoU_hi_rule1, iou_m_vhi)
 
-      FIoU_hi_rule = cp.fmax(FIoU_hi_rule0,FIoU_hi_rule1)
-      FIoU_hi_rule = cp.fmin(FIoU_hi_rule,FIoU_hi)
+      FIoU_hi_rule = lx_max(FIoU_hi_rule0,FIoU_hi_rule1)
+      FIoU_hi_rule = lx_min(FIoU_hi_rule,FIoU_hi)
 
       #FIoU_vHi = DioU_vhi && v_vhi && IoU_vhi
-      FIoU_vhi_rule = cp.fmin(v_m_vhi,iou_m_vhi)
-      FIoU_vhi_rule = cp.fmax(FIoU_vhi_rule,DIoU_m_vhi)
-      FIoU_vhi_rule = cp.fmin(FIoU_vhi_rule,FIoU_vhi)
+      FIoU_vhi_rule = lx_min(v_m_vhi,iou_m_vhi)
+      FIoU_vhi_rule = lx_max(FIoU_vhi_rule,DIoU_m_vhi)
+      FIoU_vhi_rule = lx_min(FIoU_vhi_rule,FIoU_vhi)
 
-      aggregated = cp.fmax(FIoU_vhi_rule, cp.fmax(cp.fmax(FIoU_vlo_rule,FIoU_lo_rule) , cp.fmax(FIoU_md_rule, FIoU_hi_rule)))
+      aggregated = lx_max(FIoU_vhi_rule, lx_max(lx_max(FIoU_vlo_rule,FIoU_lo_rule) , lx_max(FIoU_md_rule, FIoU_hi_rule)))
 
       FIoU_res = fuzz.defuzz(FIoU, aggregated, 'centroid')
       fiou_mat[indx] = FIoU_res
       
     fiou_mat = fiou_mat.reshape((len(DIOU),1))
     print()
-    print(f"mean fiou_mat : {cp.mean(fiou_mat)}")
+    print(f"mean fiou_mat : {torch.mean(fiou_mat)}")
 
     device = get_default_device()
     res = to_device(torch.tensor(fiou_mat), device)
     return res
+
+def lx_max(a ,b):
+  return (a+b+abs(a-b))/2
+
+def lx_min(a, b):
+  min = lx_max(a,b) - abs(a-b)
+  return min
 
 def to_device(data, device):
     """Move tensor(s) to chosen device"""   
