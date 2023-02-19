@@ -228,6 +228,13 @@ def interp_torch(x: Tensor, xi: Tensor, yi: Tensor) -> Tensor:
     """
     x = torch.from_numpy(x)
     x = to_device(x,torch.device('cuda'))
+
+    xi = torch.from_numpy(xi)
+    xi = to_device(xi,torch.device('cuda'))
+
+    yi = torch.from_numpy(yi)
+    yi = to_device(xi,torch.device('cuda'))
+    
     m = (yi[1:] - yi[:-1]) / (xi[1:] - xi[:-1])
     b = yi[:-1] - (m * xi[:-1])
 
