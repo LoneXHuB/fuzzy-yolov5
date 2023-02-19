@@ -211,6 +211,12 @@ def bisector(x, mfx):
         u = (x1 - (y1 - root) / m)
     return u
 
+def lx_max(a ,b):
+    return (a+b+abs(a-b))/2
+
+def lx_min(a, b):
+    min = lx_max(a,b) - abs(a-b)
+    return min
 
 def defuzz(x, mfx, mode):
     """
@@ -274,8 +280,7 @@ def defuzz(x, mfx, mode):
 
     elif 'lom' in mode:
         x = torch.from_numpy(x).to(device="cuda")
-        print(x[mfx == mfx.max()].size())
-        max = torch.max(x[mfx == mfx.max()], dim=1)
+        max = lx_max(x,mfx)
 
         return torch.max(max,dim=0)
 
