@@ -599,9 +599,9 @@ def interp_membership_lx(x, xmf, xx, zero_outside_x =True ):
 
 
 @jit(target_backend ="cuda")
-def interp_torch_lx(x , xx , xmf , indecies):
-    #indecies = torch.floor(x).long()
-    #indecies = torch.clamp(indecies, 0. , len(xx)-2)
+def interp_torch_lx(x ,xmf , xx ):
+    indecies = torch.floor(x).long()
+    indecies = torch.clamp(indecies, 0. , len(xx)-2)
     x1s = xx[indecies]
     x2s = xx[indecies+1]
     y1s = xmf[indecies]
