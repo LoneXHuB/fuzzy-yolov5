@@ -246,7 +246,9 @@ def defuzz(x, mfx, mode):
     --------
     skfuzzy.defuzzify.centroid, skfuzzy.defuzzify.dcentroid
     """
-    print("\ndelete me\n")
+    print(f"\n{type(mfx)}\n")
+    print(f"\n{type(x)}\n")
+
     mode = mode.lower()
     x = x.ravel()
     mfx = mfx.ravel()
@@ -336,6 +338,7 @@ def defuzz_lx(x, mfx, mode):
         return np.min(x[mfx == mfx.max()])
 
     elif 'lom' in mode:
+        x = torch.from_numpy(x).to(device="cuda")
         return max(x[mfx == mfx.max()])
 
     else:
