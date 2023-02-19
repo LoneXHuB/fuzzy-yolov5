@@ -277,6 +277,70 @@ def defuzz(x, mfx, mode):
                          .format(mode))
 
 
+def defuzz_lx(x, mfx, mode):
+    """
+    Defuzzification of a membership function, returning a defuzzified value
+    of the function at x, using various defuzzification methods.
+
+    Parameters
+    ----------
+    x : 1d array or iterable, length N
+        Independent variable.
+    mfx : 1d array of iterable, length N
+        Fuzzy membership function.
+    mode : string
+        Controls which defuzzification method will be used.
+        * 'centroid': Centroid of area
+        * 'bisector': bisector of area
+        * 'mom'     : mean of maximum
+        * 'som'     : min of maximum
+        * 'lom'     : max of maximum
+
+    Returns
+    -------
+    u : float or int
+        Defuzzified result.
+
+    Raises
+    ------
+    - EmptyMembershipError : When the membership function area is empty.
+    - InconsistentMFDataError : When the length of the 'x' and the fuzzy
+        membership function arrays are not equal.
+
+    See Also
+    --------
+    skfuzzy.defuzzify.centroid, skfuzzy.defuzzify.dcentroid
+    """
+    mode = mode.lower()
+    x = x.ravel()
+    mfx = mfx.ravel()
+    n = len(x)
+    if n != len(mfx):
+        raise InconsistentMFDataError()
+
+    if 'centroid' in mode or 'bisector' in mode:
+        if mfx.sum() == 0:  # Approximation of total area
+            raise EmptyMembershipError()
+
+        if 'centroid' in mode:
+            return centroid(x, mfx)
+
+        elif 'bisector' in mode:
+            return bisector(x, mfx)
+
+    elif 'mom' in mode:
+        return np.mean(x[mfx == mfx.max()])
+
+    elif 'som' in mode:
+        return np.min(x[mfx == mfx.max()])
+
+    elif 'lom' in mode:
+        return max(x[mfx == mfx.max()])
+
+    else:
+        raise ValueError("The input for `mode`, {}, was incorrect."
+                         .format(mode))
+
 def _interp_universe(x, xmf, mf_val):
     """
     Find the universe variable corresponding to membership `mf_val`.
