@@ -206,13 +206,13 @@ def lx_max(a ,b):
     device = get_default_device()
     a = to_device(torch.tensor(a), device)
     b = to_device(torch.tensor(b), device)
-    return (a+b+abs(a-b))/2
+    return (a+b+torch.abs(a-b))/2
 
 def lx_min(a, b):
     device = get_default_device()
     a = to_device(torch.tensor(a), device)
     b = to_device(torch.tensor(b), device)
-    min = lx_max(a,b) - abs(a-b)
+    min = lx_max(a,b) - torch.abs(a-b)
     return min
 
 def to_device(data, device):
