@@ -139,23 +139,23 @@ def compute_FIoU(DIOU, V, IOU):
       x_iou = IOU[indx,]
       x_v = V[indx, ]
       
-      iou_m_vlo = interp_torch_lx(iou, iou_vlo, x_iou)
-      iou_m_lo = interp_torch_lx(iou, iou_lo, x_iou)
-      iou_m_md = interp_torch_lx(iou, iou_md, x_iou)
-      iou_m_hi = interp_torch_lx(iou, iou_hi, x_iou)
-      iou_m_vhi = interp_torch_lx(iou, iou_vhi, x_iou)
+      iou_m_vlo = interp(iou, iou_vlo, x_iou)
+      iou_m_lo = interp(iou, iou_lo, x_iou)
+      iou_m_md = interp(iou, iou_md, x_iou)
+      iou_m_hi = interp(iou, iou_hi, x_iou)
+      iou_m_vhi = interp(iou, iou_vhi, x_iou)
 
-      DIoU_m_vlo = interp_torch_lx(DIoU, DIoU_vlo, x_DIoU)
-      DIoU_m_lo = interp_torch_lx(DIoU, DIoU_lo, x_DIoU)
-      DIoU_m_md = interp_torch_lx(DIoU, DIoU_md, x_DIoU)
-      DIoU_m_hi = interp_torch_lx(DIoU, DIoU_hi, x_DIoU)
-      DIoU_m_vhi = interp_torch_lx(DIoU, DIoU_vhi, x_DIoU)
+      DIoU_m_vlo = interp(DIoU, DIoU_vlo, x_DIoU)
+      DIoU_m_lo = interp(DIoU, DIoU_lo, x_DIoU)
+      DIoU_m_md = interp(DIoU, DIoU_md, x_DIoU)
+      DIoU_m_hi = interp(DIoU, DIoU_hi, x_DIoU)
+      DIoU_m_vhi = interp(DIoU, DIoU_vhi, x_DIoU)
 
-      v_m_vlo = interp_torch_lx(v, v_vlo, x_v)
-      v_m_lo = interp_torch_lx(v, v_lo, x_v)
-      v_m_md = interp_torch_lx(v, v_md, x_v)
-      v_m_hi = interp_torch_lx(v, v_hi, x_v)
-      v_m_vhi = interp_torch_lx(v, v_vhi, x_v)
+      v_m_vlo = interp(v, v_vlo, x_v)
+      v_m_lo = interp(v, v_lo, x_v)
+      v_m_md = interp(v, v_md, x_v)
+      v_m_hi = interp(v, v_hi, x_v)
+      v_m_vhi = interp(v, v_vhi, x_v)
 
       #RULES
       #FIoU_vlo = DIoU_vlo || iou_vlo || v_vlo
@@ -187,12 +187,8 @@ def compute_FIoU(DIOU, V, IOU):
       FIoU_vhi_rule = lx_min(v_m_vhi,iou_m_vhi)
       FIoU_vhi_rule = lx_max(FIoU_vhi_rule,DIoU_m_vhi)
       FIoU_vhi_rule = lx_min(FIoU_vhi_rule,FIoU_vhi)
-      print(f'FIoU_vhi_rule {FIoU_vhi_rule}')
-      print(f'FIoU_vlo_rule {FIoU_vlo_rule}')
-      print(f'FIoU_md_rule {FIoU_md_rule}')
-      print(f'FIoU_hi_rule {FIoU_hi_rule}')
+      
       aggregated = lx_max(FIoU_vhi_rule, lx_max(lx_max(FIoU_vlo_rule,FIoU_lo_rule) , lx_max(FIoU_md_rule, FIoU_hi_rule)))
-      print(f"aggregated \n {aggregated}")
       FIoU_res = fuzz.defuzz(FIoU, aggregated, 'lom')
       fiou_mat[indx] = FIoU_res
       
@@ -274,6 +270,30 @@ def interp_torch_lx(x ,xmf , xx):
     y2s = xmf[indecies+1]
 
     return y1s + (x - x1s) * (y2s-y1s) / (x2s - x1s)
+
+def interp(x: Tensor, xp: Tensor, fp: Tensor) -> Tensor:
+    """One-dimensional linear interpolation for monotonically increasing sample
+    points.
+
+    Returns the one-dimensional piecewise linear interpolant to a function with
+    given discrete data points :math:`(xp, fp)`, evaluated at :math:`x`.
+
+    Args:
+        x: the :math:`x`-coordinates at which to evaluate the interpolated
+            values.
+        xp: the :math:`x`-coordinates of the data points, must be increasing.
+        fp: the :math:`y`-coordinates of the data points, same length as `xp`.
+
+    Returns:
+        the interpolated values, same size as `x`.
+    """
+    m = (fp[1:] - fp[:-1]) / (xp[1:] - xp[:-1])
+    b = fp[:-1] - (m * xp[:-1])
+
+    indicies = torch.sum(torch.ge(x[:, None], xp[None, :]), 1) - 1
+    indicies = torch.clamp(indicies, 0, len(m) - 1)
+
+    return m[indicies] * x + b[indicies]
 
 def compute_car_pred(in_wheel, in_headlight, in_windshield, in_breaklight, in_rearview):
     headlight_level_lo = fuzz.interp_membership(x_headlight, headlight_lo, in_headlight)
