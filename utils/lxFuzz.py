@@ -287,6 +287,14 @@ def interp(x: Tensor, xp: Tensor, fp: Tensor) -> Tensor:
     Returns:
         the interpolated values, same size as `x`.
     """
+    x = torch.from_numpy(x)
+    x = to_device(x,torch.device('cuda'))
+
+    xp = torch.from_numpy(xp)
+    xp = to_device(xp,torch.device('cuda'))
+
+    fp = to_device(fp,torch.device('cuda'))
+
     m = (fp[1:] - fp[:-1]) / (xp[1:] - xp[:-1])
     b = fp[:-1] - (m * xp[:-1])
 
