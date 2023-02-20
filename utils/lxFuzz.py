@@ -187,7 +187,10 @@ def compute_FIoU(DIOU, V, IOU):
       FIoU_vhi_rule = lx_min(v_m_vhi,iou_m_vhi)
       FIoU_vhi_rule = lx_max(FIoU_vhi_rule,DIoU_m_vhi)
       FIoU_vhi_rule = lx_min(FIoU_vhi_rule,FIoU_vhi)
-
+      print(f'FIoU_vhi_rule {FIoU_vhi_rule}')
+      print(f'FIoU_vlo_rule {FIoU_vlo_rule}')
+      print(f'FIoU_md_rule {FIoU_md_rule}')
+      print(f'FIoU_hi_rule {FIoU_hi_rule}')
       aggregated = lx_max(FIoU_vhi_rule, lx_max(lx_max(FIoU_vlo_rule,FIoU_lo_rule) , lx_max(FIoU_md_rule, FIoU_hi_rule)))
       print(f"aggregated \n {aggregated}")
       FIoU_res = fuzz.defuzz(FIoU, aggregated, 'lom')
