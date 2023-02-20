@@ -195,6 +195,7 @@ def compute_FIoU(DIOU, V, IOU):
       
     fiou_mat = fiou_mat.reshape((len(DIOU),1))
     print()
+    print(f"mean fiou_mat : {fiou_mat}")
     print(f"mean fiou_mat : {torch.mean(fiou_mat)}")
 
     device = get_default_device()
